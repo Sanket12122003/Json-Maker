@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Box,
   Button,
   Grid,
   GridItem,
-  HStack,
   Textarea,
-  VStack,
   useMediaQuery,
 } from "@chakra-ui/react";
 import DynamicForm from "./DynamicForm";
@@ -18,7 +16,7 @@ const Home = () => {
 
   const leftSideStyles = isMobile
     ? { height: "50vh", overflowY: "scroll" }
-    : { height: "100vh", overflowY: "scroll" };
+    :  { height: "100vh" };
 
   const rightSideStyles = isMobile
     ? { height: "50vh", overflowY: "scroll" }
@@ -36,45 +34,51 @@ const Home = () => {
     }
   };
 
-  //   const handleResetField = () => {
-  //     setInputValue("");
-  //     setFormSchema([]);
-  //   };
+  const handleReset = () => {
+    setFormSchema([]);
+    setInputValue("");
+
+  };
 
   return (
     <>
       <Grid templateColumns={isMobile ? "1fr" : "repeat(2, 1fr)"} gap={6}>
         <GridItem {...leftSideStyles}>
-          {/* <VStack spacing={4}> */}
           <Textarea
             value={inputValue}
             placeholder="Paste UI schema here"
             onChange={handleInputChange}
             height="100vh"
             resize="none"
-            overflowY="scroll"
+           // overflowY="scroll"
             color="gray.100"
             bg="gray.700"
             fontSize={"20px"}
           />
-          {/* <HStack>
-              <Button onClick={handleSubmitField} colorScheme="green">
-                Submit
-              </Button>
-              <Button onClick={handleResetField} colorScheme="green">
-                Reset
-              </Button>
-            </HStack> */}
-          {/* </VStack> */}
+      
         </GridItem>
 
         <GridItem {...rightSideStyles}>
           <Box borderWidth="1px" borderRadius="lg" p={4}>
             <DynamicForm formSchema={formSchema} />
-            {/* <HStack>
-              <Button>Cancel</Button>
-              <Button>Submit</Button>
-            </HStack> */}
+            {formSchema.length > 0 && (
+              <Box
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Button
+                  Button
+                  colorScheme="blue"
+                  marginTop={"10px"}
+                  onClick={handleReset}
+                >
+                  Reset
+                </Button>
+              </Box>
+            )}
           </Box>
         </GridItem>
       </Grid>
