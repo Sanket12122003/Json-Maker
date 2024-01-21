@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Checkbox,
   FormControl,
@@ -6,11 +6,17 @@ import {
   HStack,
   Tooltip,
 } from "@chakra-ui/react";
+import { FormDataContext } from "../Pages/Home/DynamicForm.js";
 
-const SwitchField = ({ schema, updateFormData }) => {
+
+  const SwitchField = ({ schema }) => {
+    const updateFormData = useContext(FormDataContext);
   const [isChecked, setIsChecked] = React.useState(
     schema.validate.defaultValue
   );
+  useEffect(() => {
+    updateFormData(schema.jsonKey, schema.validate.defaultValue);
+  }, []);
 
   const handleChange = (event) => {
     setIsChecked(event.target.checked);

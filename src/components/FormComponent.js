@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   FormControl,
@@ -18,8 +18,14 @@ import InputField from "./InputField";
 import RadioField from "./RadioField";
 import SelectField from "./SelectField";
 import SwitchField from "./SwitchField";
+import { FormDataContext } from "../Pages/Home/DynamicForm";
 
 const FormComponent = ({ schema }) => {
+  const updateFormData = useContext(FormDataContext);
+
+  useEffect(() => {
+    updateFormData(schema.jsonKey, schema.subParameters[0].validate.defaultValue);
+  }, []);
 
 
   const [selectedTab, setSelectedTab] = useState(
@@ -28,6 +34,13 @@ const FormComponent = ({ schema }) => {
 
   const handleTabChange = (tabValue) => {
     setSelectedTab(tabValue);
+    updateFormData(schema.jsonKey, tabValue);
+
+   
+    const selectedButtonSchema = schema.subParameters.find(
+      (param) => param.jsonKey === tabValue
+    );
+
   };
 
 
@@ -35,7 +48,7 @@ const FormComponent = ({ schema }) => {
     if (field.uiType === "Radio") {
       return (
         <FormControl isRequired={field.validate.required}>
-          {/* <FormLabel>{field.label}</FormLabel> */}
+        
 
           <ButtonGroup
             size="sm"
@@ -76,19 +89,11 @@ const FormComponent = ({ schema }) => {
           return renderSubParameters(schema.subParameters);
         }
       } else if (schema.uiType === "Select") {
-        return (
-          <SelectField schema={schema} />
-        );
+        return <SelectField schema={schema} />;
       } else if (schema.uiType === "Input") {
-        return (
-          <InputField
-            schema={schema}
-          />
-        );
+        return <InputField schema={schema} />;
       } else if (schema.uiType === "Switch") {
-        return (
-          <SwitchField schema={schema} />
-        );
+        return <SwitchField schema={schema} />;
       }
 
       return null;
