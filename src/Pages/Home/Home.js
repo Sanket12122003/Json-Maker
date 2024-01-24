@@ -1,4 +1,5 @@
-import React, { useContext, useState } from "react";
+
+import Header from "../Header";
 import {
   Box,
   Button,
@@ -8,6 +9,21 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 import DynamicForm from "./DynamicForm";
+import { useState } from "react";
+import { useFormContext } from "../../FormContext";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const toastOptions = {
+  position: "bottom-right",
+  autoClose: 2000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: false,
+  draggable: true,
+  progress: undefined,
+  theme: "dark",
+}
 
 const Home = () => {
   const [inputValue, setInputValue] = useState();
@@ -30,18 +46,23 @@ const Home = () => {
         setFormSchema(parsedFields);
       }
     } catch (error) {
-      console.error("Invalid JSON input");
+      toast.error("Invalid Form Schema", toastOptions);
     }
   };
+  const { handleResetData } = useFormContext();
 
   const handleReset = () => {
     setFormSchema([]);
     setInputValue("");
+    handleResetData();
+    toast.success("Form Reset Successfully", toastOptions);
 
   };
 
   return (
     <>
+      <Header />
+
       <Grid templateColumns={isMobile ? "1fr" : "repeat(2, 1fr)"} gap={6}>
         <GridItem {...leftSideStyles}>
           <Textarea
@@ -50,38 +71,40 @@ const Home = () => {
             onChange={handleInputChange}
             height="100vh"
             resize="none"
-           // overflowY="scroll"
+            // overflowY="scroll"
             color="gray.100"
             bg="gray.700"
             fontSize={"20px"}
           />
-      
         </GridItem>
 
         <GridItem {...rightSideStyles}>
-          <Box borderWidth="1px" borderRadius="lg" p={4}>
-            <DynamicForm formSchema={formSchema} />
-            {formSchema.length > 0 && (
-              <Box
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Button
-                  Button
-                  colorScheme="blue"
-                  marginTop={"10px"}
-                  onClick={handleReset}
+          {formSchema.length > 0 && (
+            <>
+              <Box borderWidth="1px" borderRadius="lg" p={4}>
+                <DynamicForm formSchema={formSchema} />
+        <Box
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
                 >
-                  Reset
-                </Button>
-              </Box>
-            )}
-          </Box>
+                     <Button
+                    Button
+                    colorScheme="blue"
+                    marginTop={"10px"}
+                    onClick={handleReset}
+                  >
+                    Reset
+                  </Button>
+                </Box>
+                </Box>
+            </>
+          )}
         </GridItem>
       </Grid>
+      <ToastContainer />
     </>
   );
 };

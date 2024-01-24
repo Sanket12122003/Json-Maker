@@ -1,24 +1,17 @@
 
-import React from 'react';
-import Home from './Pages/Home/Home';
+import React from "react";
+import Home from "./Pages/Home/Home";
+import { FormContextProvider } from "./FormContext.js";
 
 const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-      
-        </a>
-      </header>
-      <Home />
-    </div>
+    
+    <>
+      <FormContextProvider>
+        <Home />
+      </FormContextProvider>
+    </>
   );
-}
+};
 
 export default App;
